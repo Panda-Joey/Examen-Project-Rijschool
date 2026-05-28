@@ -6,12 +6,13 @@ $username = "root";
 $password = "password";
 
 try {
-    $conn = new mysqli($servername, $username, $password, "mydb");
+    $conn = new mysqli($servername, $username, $password, "Eend");
 } catch (mysqli_sql_exception) {
     echo "Could not connect";
     exit();
 }
 
+$adminNaam = "Admin";
 
 ?>
 
@@ -23,27 +24,31 @@ try {
     <link rel="stylesheet" href="/css/AD.css">
 </head>
 <body>
-<div class= "navbar">
-    <a href="#" class="nav-item active">
-    <i class="icon">⌂</i>
-    <span>Dashboard</span>
-  </a>
 
-  <a href="#" class="nav-item">
-    <i class="icon">👥</i>
-    <span>Instructeurs</span>
-  </a>
 
-  <a href="#" class="nav-item">
-    <i class="icon">👤</i>
-    <span>Leerlingen</span>
-  </a>
+<div class="container">
 
-  <a href="#" class="nav-item">
-    <i class="icon">🚗</i>
-    <span>Wagenpark</span>
-  </a>
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <div class="logo-section">
+            <h2>👋 <?php echo $adminNaam; ?></h2>
+            <span class="badge">Admin</span>
+            <p>Rijschool Dashboard</p>
+        </div>
+
+        <a href="logout.php" class="logout-btn">Uitloggen →</a>
+    </header>
+
+    <!-- NAVIGATIE -->
+    <div class="nav-grid">
+        <a href="http://localhost/AdminDashboard.php" class="nav-card active">Dashboard</a>
+        <a href="http://localhost/AdminGebruikers.php" class="nav-card">Gebruikers</a>
+        <a href="#" class="nav-card">Rooster</a>
+        <a href="#" class="nav-card">Profiel</a>
+    </div>
+
 
 </div>
+
 </body>
 </html>
