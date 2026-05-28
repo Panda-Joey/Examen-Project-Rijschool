@@ -1,0 +1,1537 @@
+/* ================================================================
+   STYLE.CSS — Rijschool Applicatie
+   ================================================================
+   Inhoudsopgave:
+    1.  RESET & BASIS
+    2.  TYPOGRAFIE & KLEUREN
+    3.  LAYOUT — CONTAINER
+    4.  NAVIGATIE — TOP BUTTONS
+    5.  BERICHTEN — SUCCES / FOUT / WAARSCHUWING
+    6.  FORMULIEREN — GEDEELD
+    7.  KNOPPEN — GEDEELD
+    8.  LOGIN.PHP
+    9.  DASHBOARD.PHP — HEADER & STATS
+   10.  DASHBOARD.PHP — VOLGENDE LES & MAAND NAV
+   11.  DASHBOARD.PHP — LESKAARTEN
+   12.  INDEX.PHP — KALENDER (zelfde stijl als dashboard)
+   13.  INDEX.PHP — AANKOMENDE LESSEN
+   14.  WIJZIG.PHP
+   15.  ANNULEER.PHP
+   16.  BESCHIKBAARHEID.PHP
+   17.  LES_INROOSTEREN.PHP
+   18.  MODAL
+   19.  RESPONSIVE — TABLET  (min 480px)
+   20.  RESPONSIVE — DESKTOP (min 768px)
+   ================================================================
+   Kleurpalet:
+     Primair donkerblauw : #1b2940
+     Hover blauw         : #243a55
+     Succes groen        : #28a745
+     Fout rood           : #dc3545
+     Waarschuwing geel   : #ffc107
+     Achtergrond         : #efefef
+     Wit                 : #ffffff
+   ================================================================ */
+
+
+/* ================================================================
+   1. RESET & BASIS
+   ================================================================ */
+
+/* Zorg dat padding/border meegeteld worden in breedte */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 10px;
+    background: #efefef;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #111;
+}
+
+h1 {
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    color: #1b2940;
+}
+
+a { color: inherit; }
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f0f0f0; }
+::-webkit-scrollbar-thumb { background: #1b2940; }
+
+/* Slide-in animatie (gedeeld door meerdere componenten) */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ================================================================
+   2. TYPOGRAFIE & KLEUREN
+   Kleurconventies zijn vastgelegd in de header-comment bovenaan.
+   ================================================================ */
+
+
+/* ================================================================
+   3. LAYOUT — CONTAINER
+   Centreer de inhoud met een max-breedte.
+   ================================================================ */
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+
+/* ================================================================
+   4. NAVIGATIE — TOP BUTTONS
+   Gebruikt op: alle pagina's als navigatiebalk.
+   Op mobiel: 2 kolommen grid. Op tablet+: flex rij.
+   ================================================================ */
+.top-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+/* Elke navigatieknop, ook als <a> of <div> */
+.nav-btn {
+    padding: 12px 6px;
+    background: white;
+    border: 2px solid #1b2940;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    touch-action: manipulation;
+}
+
+/* Actieve of hover staat van navigatieknop */
+.nav-btn.active,
+.nav-btn:hover {
+    background: #1b2940;
+    color: white;
+}
+
+
+/* ================================================================
+   5. BERICHTEN — SUCCES / FOUT / WAARSCHUWING
+   Gebruikt op: wijzig.php, annuleer.php, les_inroosteren.php.
+   ================================================================ */
+
+/* Groene succesbanner */
+.succes {
+    background: #d4edda;
+    border: 2px solid #28a745;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #155724;
+}
+
+/* Rode foutbanner */
+.fout {
+    background: #f8d7da;
+    border: 2px solid #dc3545;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #721c24;
+}
+
+/* Gele waarschuwingsbanner */
+.waarschuwing-banner {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: #856404;
+}
+
+
+/* ================================================================
+   6. FORMULIEREN — GEDEELD
+   Gebruikt op: login.php, wijzig.php, annuleer.php,
+                les_inroosteren.php, beschikbaarheid.php.
+   ================================================================ */
+
+/* Wrapper per formulierveld met label + input */
+.form-group {
+    margin-bottom: 16px;
+}
+
+/* Label boven elk formulierveld */
+.form-group label {
+    display: block;
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #1b2940;
+}
+
+/* Gedeelde stijl voor alle invoervelden */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    transition: border-color .15s;
+}
+
+/* Focusstatus: blauw kader */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #1b2940;
+    outline: none;
+}
+
+/* Textarea specifiek: verticaal resizable */
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Rood kader als verplicht veld leeg is bij submit */
+.form-group textarea.leeg,
+.form-group input.leeg {
+    border-color: #dc3545;
+}
+
+/* Foutmelding die verschijnt onder een leeg verplicht veld */
+.verplicht-melding {
+    color: #dc3545;
+    font-size: 11px;
+    margin-top: 4px;
+    display: none;
+}
+
+/* Tekenteller onder textarea (bijv. reden voor annulering) */
+.reden-counter {
+    font-size: 10px;
+    color: #888;
+    text-align: right;
+    margin-top: 3px;
+}
+
+/* Info-blok met huidige lesgegevens boven wijzig/annuleer formulier */
+.les-info {
+    background: #f0f4ff;
+    border: 1px solid #8db6ff;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+.les-info p { margin: 3px 0; }
+
+/* Vorige reden tonen in les-info blok */
+.reden-huidig {
+    background: #fff8e1;
+    border: 1px solid #ffc107;
+    padding: 8px 12px;
+    font-size: 11px;
+    margin-top: 6px;
+    color: #555;
+}
+
+
+/* ================================================================
+   7. KNOPPEN — GEDEELD
+   Gebruikt op: alle formulierpagina's en leskaarten.
+   ================================================================ */
+
+/* Flexrij voor meerdere knoppen naast elkaar */
+.btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Primaire opslaan knop (donkerblauw) */
+.btn-opslaan {
+    flex: 1;
+    background: #1b2940;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btn-opslaan:hover { background: #243a55; }
+
+/* Terug knop (wit met blauwe rand) */
+.btn-terug {
+    flex: 1;
+    background: white;
+    color: #1b2940;
+    border: 2px solid #1b2940;
+    padding: 12px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-weight: bold;
+}
+
+.btn-terug:hover { background: #f0f4ff; }
+
+/* Annuleer knop (rood, alleen op annuleer.php) */
+.btn-annuleer {
+    flex: 1;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
+.btn-annuleer:hover { background: #b02a37; }
+
+/* Wijzig knop in leskaarten (donkerblauw) */
+.edit {
+    background: #1b2940;
+    color: white;
+    border: 2px solid #1b2940;
+    padding: 6px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    touch-action: manipulation;
+}
+
+.edit:hover { background: #243a55; }
+
+/* Annuleer knop in leskaarten (wit met blauwe rand) */
+.cancel {
+    background: white;
+    color: #1b2940;
+    border: 2px solid #1b2940;
+    padding: 6px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    touch-action: manipulation;
+}
+
+.cancel:hover { background: #f8d7da; border-color: #dc3545; color: #dc3545; }
+
+
+/* ================================================================
+   8. LOGIN.PHP
+   Centreer de loginbox midden op het scherm.
+   ================================================================ */
+
+/* Loginpagina: volledige schermhoogte gecentreerd */
+body.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 16px;
+}
+
+/* Witte kaart met schaduw voor het loginformulier */
+.login-box {
+    background: white;
+    border: 3px solid #1b2940;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 6px 6px 0 #1b2940;
+}
+
+.login-box h1 {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+    color: #1b2940;
+}
+
+/* Subtitel onder de paginatitel */
+.login-box p.sub {
+    color: #888;
+    font-size: 12px;
+    margin: 0 0 24px 0;
+}
+
+/* Inlogknop (volledige breedte) */
+.btn-login {
+    width: 100%;
+    background: #1b2940;
+    color: white;
+    border: none;
+    padding: 13px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.btn-login:hover { background: #243a55; }
+
+/* Tijdelijke demotabel onderaan de loginpagina */
+.demo-box {
+    margin-top: 24px;
+    border: 2px dashed #ccc;
+    padding: 14px;
+    background: #fafafa;
+}
+
+.demo-box h4 {
+    margin: 0 0 10px 0;
+    font-size: 12px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+/* Tabel met testaccounts */
+.demo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.demo-table th {
+    background: #1b2940;
+    color: white;
+    padding: 5px 8px;
+    text-align: left;
+    font-size: 11px;
+}
+
+.demo-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.demo-table tr:last-child td { border-bottom: none; }
+
+/* Rol-badge (instructeur / student) — ook gebruikt in dashboard */
+.rol-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 2px;
+}
+
+.rol-instructeur,
+.badge-instructeur { background: #dbeafe; color: #1e40af; }
+
+.rol-student,
+.badge-student { background: #dcfce7; color: #166534; }
+
+/* Invulknop in de demotabel */
+.fill-btn {
+    background: none;
+    border: 1px solid #1b2940;
+    padding: 2px 7px;
+    font-size: 10px;
+    cursor: pointer;
+    color: #1b2940;
+    font-family: Arial, sans-serif;
+}
+
+.fill-btn:hover { background: #1b2940; color: white; }
+
+
+/* ================================================================
+   9. DASHBOARD.PHP — HEADER & STATS
+   Bovenste balk met naam, rol en uitlogknop. Statistiekenrij.
+   ================================================================ */
+
+/* Blauwe headerbalk bovenaan het dashboard */
+.dash-header {
+    background: #1b2940;
+    color: white;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.dash-header h2 { margin: 0; font-size: 16px; }
+.dash-header span { font-size: 12px; opacity: .75; }
+
+/* Uitlogknop rechtsboven in de header */
+.logout-btn {
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.4);
+    color: white;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+}
+
+.logout-btn:hover { background: rgba(255,255,255,.25); }
+
+/* Grid van statistiekenkaartjes (lessen, uren, pakket) */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+/* Individueel statistiekenkaartje */
+.stat-card {
+    background: white;
+    border: 2px solid #1b2940;
+    padding: 14px 16px;
+    text-align: center;
+}
+
+/* Groot getal in statistiekenkaartje */
+.stat-card .getal {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1b2940;
+    line-height: 1;
+}
+
+/* Beschrijving onder het getal */
+.stat-card .label {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+}
+
+
+/* ================================================================
+   10. DASHBOARD.PHP — VOLGENDE LES & MAAND NAVIGATIE
+   ================================================================ */
+
+/* Donkerblauwe banner met informatie over de eerstvolgende les */
+.volgende-les {
+    background: #1b2940;
+    color: white;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid #111;
+}
+
+.volgende-les h3    { margin: 0 0 4px 0; font-size: 13px; opacity: .7; }
+.volgende-les .groot { font-size: 20px; font-weight: bold; }
+.volgende-les .detail { font-size: 12px; opacity: .85; margin-top: 4px; }
+.volgende-les .geen  { font-size: 13px; opacity: .7; }
+
+/* Maandnavigatie met pijlen links/rechts */
+.maand-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    border: 2px solid #1b2940;
+    padding: 10px 16px;
+    margin-bottom: 12px;
+}
+
+.maand-nav h3 { margin: 0; font-size: 14px; color: #1b2940; }
+
+/* Pijlknoppen in de maandnavigatie */
+.maand-nav a {
+    color: #1b2940;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 4px 10px;
+    border: 1px solid #1b2940;
+}
+
+.maand-nav a:hover { background: #1b2940; color: white; }
+
+
+/* ================================================================
+   11. DASHBOARD.PHP — LESKAARTEN
+   Lijst van lessen met datum, info, auto en actieknoppen.
+   ================================================================ */
+
+/* Verticale lijst van leskaarten */
+.les-lijst {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Basisstijl van een leskaart */
+.les-kaart {
+    background: white;
+    border: 2px solid #d0d8e4;
+    border-left: 5px solid #1b2940;
+    padding: 14px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+/* Variant: les is vandaag — gele linkerbalk + lichtgeel achtergrond */
+.les-kaart.vandaag {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+}
+
+/* Variant: les is al geweest — grijs en doorzichtig */
+.les-kaart.verleden {
+    border-left-color: #9ca3af;
+    opacity: .7;
+}
+
+/* Donkerblauw datumblok links in de leskaart */
+.les-datum-blok {
+    text-align: center;
+    min-width: 52px;
+    background: #1b2940;
+    color: white;
+    padding: 8px 10px;
+}
+
+.les-datum-blok .dag      { font-size: 22px; font-weight: bold; line-height: 1; }
+.les-datum-blok .maandnaam { font-size: 10px; text-transform: uppercase; margin-top: 2px; }
+
+/* Middelste kolom met lesdetails */
+.les-info              { flex: 1; min-width: 180px; }
+.les-info h4           { margin: 0 0 4px 0; font-size: 14px; color: #1b2940; }
+.les-info p            { margin: 2px 0; font-size: 12px; color: #555; }
+
+/* Tijdstipbadge binnen lesinfo */
+.les-info .tijd-badge {
+    display: inline-block;
+    background: #1b2940;
+    color: white;
+    font-size: 11px;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+}
+
+/* Rechterkolom: autoinformatie en eventuele wijzigreden */
+.les-extra {
+    min-width: 160px;
+    background: #f8f9ff;
+    border: 1px solid #d0d8e4;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #555;
+}
+
+.les-extra p      { margin: 2px 0; }
+.les-extra strong { color: #1b2940; }
+
+/* Rij met wijzig/annuleer knoppen onderaan leskaart */
+.les-acties {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Waarschuwingsbadge voor studenten met een beperking */
+.tag-beperking {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    color: #92400e;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: bold;
+}
+
+/* Lege staat: geen lessen in die maand */
+.geen-lessen {
+    background: white;
+    border: 2px dashed #ccc;
+    padding: 30px;
+    text-align: center;
+    color: #888;
+    font-size: 13px;
+}
+
+
+/* ================================================================
+   12. INDEX.PHP — KALENDER
+   Zelfde stijl als het dashboard (leskaarten, maandnav, etc.).
+   Kalender toont lessen per dag in een 7-koloms grid.
+   ================================================================ */
+
+/* Kalender container */
+.calendar {
+    background: white;
+    border: 2px solid #1b2940;
+}
+
+/* Blauwe headerbalk van de kalender met maandnaam en pijlen */
+.calendar-header {
+    background: #1b2940;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+}
+
+.calendar-header h2 { margin: 0; font-size: 14px; }
+
+/* Navigatiepijlen in kalenderheader */
+.calendar-header a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 6px 12px;
+    touch-action: manipulation;
+    border: 1px solid rgba(255,255,255,.3);
+}
+
+.calendar-header a:hover { background: rgba(255,255,255,.15); }
+
+/* Rij met dagnamen (Ma t/m Zo) */
+.days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding: 6px 6px 2px;
+    background: #f5f7fa;
+}
+
+/* Individuele dagnaamcel */
+.days-header div {
+    background: #1b2940;
+    color: white;
+    padding: 6px 2px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 9px;
+    letter-spacing: .5px;
+}
+
+/* Kalender grid: 7 kolommen */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding: 4px;
+    background: #d0d8e4;
+}
+
+/* Individuele dagcel */
+.day {
+    background: white;
+    border-left: 3px solid #1b2940;
+    min-height: 52px;
+    padding: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Lege cel vóór de eerste dag van de maand */
+.day.empty {
+    background: #f5f7fa;
+    border-left-color: transparent;
+}
+
+/* Dagnummer bovenin de dagcel */
+.date {
+    font-weight: bold;
+    font-size: 10px;
+    color: #1b2940;
+    margin-bottom: 2px;
+    line-height: 1;
+}
+
+/* Lesblokje binnen een dagcel */
+.lesson {
+    background: #dbeafe;
+    border-left: 3px solid #1b2940;
+    padding: 2px 4px;
+    margin-bottom: 2px;
+    font-size: 8px;
+    cursor: pointer;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    touch-action: manipulation;
+    color: #1b2940;
+    font-weight: bold;
+}
+
+.lesson:hover,
+.lesson:active { background: #bcd4ff; }
+
+/* Rode dag: alle lessen op die dag zijn vervallen */
+.day.vervallen-dag {
+    background: #fff0f0 !important;
+    border-left-color: #dc3545 !important;
+}
+
+.day.vervallen-dag .date { color: #dc3545; }
+
+/* VERVALT-label bovenin een rode dagcel */
+.vervallen-label {
+    background: #dc3545;
+    color: white;
+    font-size: 7px;
+    font-weight: bold;
+    padding: 1px 4px;
+    display: block;
+    text-align: center;
+    margin-bottom: 3px;
+    letter-spacing: .5px;
+}
+
+/* Individueel vervallen les: grijs en doorgestreept */
+.lesson.vervallen {
+    background: #f0f0f0 !important;
+    border-left-color: #999 !important;
+    color: #aaa;
+    text-decoration: line-through;
+}
+
+
+/* ================================================================
+   13. INDEX.PHP — AANKOMENDE LESSEN
+   Lijst onder de kalender met kaartjes per les.
+   Zelfde stijl als dashboard leskaarten.
+   ================================================================ */
+
+/* Container voor de aankomende-lessenlijst */
+.upcoming {
+    margin-top: 12px;
+    background: white;
+    border: 2px solid #1b2940;
+}
+
+/* Blauwe koptitel van de aankomende-lessenlijst */
+.upcoming h3 {
+    background: #1b2940;
+    color: white;
+    margin: 0;
+    padding: 10px 16px;
+    font-size: 13px;
+}
+
+/* Individueel leskaartje in de aankomende-lessenlijst */
+.lesson-card {
+    margin: 8px;
+    padding: 10px 14px;
+    border: 2px solid #d0d8e4;
+    border-left: 5px solid #1b2940;
+    background: #f8fbff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lesson-card h4 { margin: 0 0 3px 0; font-size: 13px; color: #1b2940; }
+.lesson-card p  { margin: 2px 0; font-size: 12px; }
+
+/* Knoprij in een aankomende-lessenkaartje */
+.buttons {
+    display: flex;
+    gap: 8px;
+}
+
+
+/* ================================================================
+   14. WIJZIG.PHP
+   Formulier om datum, tijd en instructeur van een les te wijzigen.
+   Toont beschikbare tijdslots op basis van instructeursbeschikbaarheid.
+   ================================================================ */
+
+/* Formulierwrapper */
+.wijzig-form {
+    background: white;
+    border: 2px solid #111;
+    padding: 20px;
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+/* Statusbadge naast instructeurnaam (vrij / bezet / niet beschikbaar) */
+.instr-status {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 7px;
+    font-weight: bold;
+    margin-left: 6px;
+}
+
+.instr-vrij  { background: #d4edda; color: #155724; border: 1px solid #28a745; }
+.instr-bezet { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+.instr-geen  { background: #f0f0f0; color: #888;    border: 1px solid #ccc;    }
+
+/* Wrapper voor de tijdslot-dropdown */
+.tijd-select-wrap { position: relative; }
+
+.tijd-select-wrap select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    font-size: 13px;
+    font-family: Arial;
+    box-sizing: border-box;
+}
+
+/* Kleur van de select op basis van beschikbaarheid */
+.tijd-select-wrap select:focus { border-color: #1b2940; outline: none; }
+.tijd-select-wrap select.bezet { border-color: #dc3545; }
+.tijd-select-wrap select.vrij  { border-color: #28a745; }
+
+/* Legendarij onder de tijdslot-dropdown */
+.legenda {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+    font-size: 10px;
+}
+
+.legenda-item { display: flex; align-items: center; gap: 4px; }
+
+/* Gekleurde stip in de legenda */
+.dot         { width: 10px; height: 10px; border-radius: 50%; }
+.dot-vrij    { background: #28a745; }
+.dot-bezet   { background: #dc3545; }
+.dot-geen    { background: #ccc; }
+
+/* Infobanner met beschikbaarheidsdetails van de geselecteerde instructeur */
+.beschikbaar-info {
+    background: #f0f4ff;
+    border: 1px solid #8db6ff;
+    border-left: 4px solid #1b2940;
+    padding: 8px 12px;
+    font-size: 11px;
+    margin-top: 8px;
+    color: #333;
+}
+
+/* Variant: instructeur heeft geen beschikbaarheid op die dag */
+.beschikbaar-info.geen {
+    background: #f8f8f8;
+    border-color: #ccc;
+    border-left-color: #999;
+    color: #888;
+}
+
+/* Variant: instructeur is vol op die dag */
+.beschikbaar-info.vol {
+    background: #fff3cd;
+    border-color: #ffc107;
+    border-left-color: #f59e0b;
+    color: #856404;
+}
+
+
+/* ================================================================
+   15. ANNULEER.PHP
+   Formulier om een les te annuleren met verplichte reden.
+   ================================================================ */
+
+/* Formulierwrapper annuleren */
+.annuleer-form {
+    background: white;
+    border: 2px solid #111;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Les-infoblok: rood getint voor annuleren */
+.annuleer-form .les-info {
+    background: #fff5f5;
+    border: 1px solid #ffaaaa;
+}
+
+/* Koptitel in les-infoblok */
+.annuleer-form .les-info h4 {
+    margin: 0 0 6px 0;
+    color: #c00;
+    font-size: 13px;
+}
+
+/* Textarea focusstatus rood passend bij annuleren */
+.annuleer-form .form-group textarea:focus {
+    border-color: #dc3545;
+}
+
+
+/* ================================================================
+   16. BESCHIKBAARHEID.PHP
+   Pagina voor instructeurs om beschikbare dagen en tijden in te stellen.
+   ================================================================ */
+
+/* Formulierwrapper beschikbaarheid */
+.beschikbaar-form {
+    background: white;
+    border: 2px solid #111;
+    padding: 20px;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+/* Grid van dag-checkboxknoppen (Ma t/m Zo) */
+.dag-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+/* Verberg de echte checkbox, gebruik het label als knop */
+.dag-checkbox { display: none; }
+
+/* Klikbaar dag-label dat als toggleknop werkt */
+.dag-label {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    background: #f0f0f0;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all .15s;
+    user-select: none;
+}
+
+.dag-label:hover { border-color: #1b2940; background: #e8edf5; }
+
+/* Geselecteerde dag: donkerblauw */
+.dag-checkbox:checked + .dag-label {
+    background: #1b2940;
+    color: white;
+    border-color: #1b2940;
+}
+
+/* Teller die toont hoeveel dagen geselecteerd zijn */
+.dag-teller {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 16px;
+}
+
+.dag-teller span { font-weight: bold; color: #1b2940; }
+
+/* Instellingenpaneel per geselecteerde dag */
+.dag-instellingen {
+    display: none;
+    background: #f8f9ff;
+    border: 2px solid #1b2940;
+    border-left: 5px solid #1b2940;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    animation: slideIn .2s ease;
+}
+
+/* Zichtbaar als de dag geselecteerd is */
+.dag-instellingen.zichtbaar { display: block; }
+
+.dag-instellingen h4 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    color: #1b2940;
+}
+
+/* Rij met begin- en eindtijd selects naast elkaar */
+.tijd-rij {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 12px;
+}
+
+.tijd-rij .form-group {
+    flex: 1;
+    min-width: 100px;
+    margin-bottom: 0;
+}
+
+.tijd-rij .form-group label { font-size: 11px; }
+
+/* Rij met klikbare nummerknoppen voor max lessen */
+.max-lessen-rij {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* Individuele nummerknop voor max lessen */
+.max-btn {
+    width: 36px;
+    height: 36px;
+    background: #f0f0f0;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .1s;
+}
+
+.max-btn:hover  { border-color: #1b2940; background: #e8edf5; }
+.max-btn.actief { background: #1b2940; color: white; border-color: #1b2940; }
+
+/* Overzicht van huidige beschikbaarheid */
+.overzicht {
+    background: white;
+    border: 2px solid #111;
+    margin-top: 16px;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.overzicht h3 {
+    background: #1b2940;
+    color: white;
+    margin: 0;
+    padding: 10px 16px;
+    font-size: 13px;
+}
+
+/* Rij per dag in het overzicht */
+.overzicht-rij {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.overzicht-rij:last-child { border-bottom: none; }
+
+/* Dagnaam vetgedrukt in overzichtsrij */
+.dag-naam { font-weight: bold; color: #1b2940; min-width: 90px; }
+
+/* Flex-rij van tijdslotbadges */
+.slot-grid {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+/* Tijdslotbadge: standaard blauw */
+.slot {
+    padding: 2px 7px;
+    font-size: 10px;
+    border: 1px solid #4d7cff;
+    background: #bcd4ff;
+    color: #1b2940;
+}
+
+/* Bezet tijdslot: rood en doorgestreept */
+.slot.bezet {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+    text-decoration: line-through;
+}
+
+/* Vrij tijdslot: groen */
+.slot.vrij {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+
+/* ================================================================
+   17. LES_INROOSTEREN.PHP
+   4-stappen flow voor studenten om een nieuwe les in te plannen.
+   Stap 1: datum, 2: instructeur, 3: tijdstip, 4: details.
+   ================================================================ */
+
+/* Begrensde breedte voor de inroosterwizard */
+.inrooster-wrap {
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+/* Stappenbalk bovenaan de wizard */
+.stappen {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+    border: 2px solid #1b2940;
+}
+
+/* Individuele stap in de balk */
+.stap {
+    flex: 1;
+    padding: 10px 6px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    background: #f0f0f0;
+    color: #888;
+    border-right: 2px solid #1b2940;
+}
+
+.stap:last-child { border-right: none; }
+
+/* Actieve stap: donkerblauw */
+.stap.actief { background: #1b2940; color: white; }
+
+/* Voltooide stap: groen */
+.stap.klaar  { background: #d4edda; color: #155724; }
+
+/* Stapnummer bovenin de stap */
+.stap .nr { display: block; font-size: 14px; margin-bottom: 2px; }
+
+/* Wrapper voor de datumselectie */
+.datum-wrap {
+    background: white;
+    border: 2px solid #1b2940;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+/* Lijst van instructeurskaarten */
+.instr-kaarten {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+/* Klikbare instructeurskaart */
+.instr-kaart {
+    background: white;
+    border: 2px solid #d0d8e4;
+    border-left: 5px solid #1b2940;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.instr-kaart:hover   { border-color: #1b2940; box-shadow: 3px 3px 0 #1b2940; }
+
+/* Geselecteerde instructeurskaart */
+.instr-kaart.gekozen { border-color: #1b2940; background: #f0f4ff; box-shadow: 3px 3px 0 #1b2940; }
+
+/* Volle instructeur: rood en niet klikbaar */
+.instr-kaart.vol     { border-left-color: #dc3545; opacity: .6; cursor: not-allowed; }
+
+/* Naam in instructeurskaart */
+.instr-naam  { font-weight: bold; font-size: 14px; color: #1b2940; margin-bottom: 4px; }
+
+/* Beschikbaarheidsmeta in instructeurskaart */
+.instr-meta  { font-size: 11px; color: #666; margin-bottom: 8px; }
+
+/* Omschrijving/bio van de instructeur */
+.instr-omschr { font-size: 11px; color: #888; font-style: italic; margin-bottom: 8px; }
+
+/* Rij gekleurde blokjes die laten zien hoeveel plekken vrij/bezet zijn */
+.plek-balk {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+/* Individueel plek-blokje */
+.plek-blok {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    background: #f0f0f0;
+}
+
+.plek-blok.bezet { background: #f8d7da; border-color: #dc3545; }
+.plek-blok.vrij  { background: #d4edda; border-color: #28a745; }
+
+/* Flexrij van klikbare tijdslot-knoppen */
+.slot-knoppen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+/* Klikbare tijdslotknop (bijv. 08:00–10:00) */
+.slot-knop {
+    padding: 6px 10px;
+    font-size: 11px;
+    font-family: Arial;
+    font-weight: bold;
+    border: 2px solid #1b2940;
+    background: white;
+    cursor: pointer;
+    transition: all .1s;
+    touch-action: manipulation;
+}
+
+.slot-knop:hover  { background: #1b2940; color: white; }
+
+/* Geselecteerde tijdslotknop */
+.slot-knop.actief { background: #1b2940; color: white; }
+
+/* Bezet tijdslot: grijs en niet klikbaar */
+.slot-knop.bezet  { background: #f0f0f0; border-color: #ccc; color: #aaa; cursor: not-allowed; text-decoration: line-through; }
+
+/* Stap-4 formulier: verborgen totdat een tijdstip gekozen is */
+.formulier-sectie {
+    background: white;
+    border: 2px solid #1b2940;
+    padding: 20px;
+    display: none;
+}
+
+/* Zichtbaar zodra tijdstip gekozen is */
+.formulier-sectie.zichtbaar { display: block; }
+
+/* Donkerblauwe samenvattingsbalk bovenin het detailformulier */
+.keuze-samenvatting {
+    background: #1b2940;
+    color: white;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+/* Grote waarde in samenvattingsbalk */
+.keuze-samenvatting strong { display: block; font-size: 15px; }
+
+/* Lege staat als er geen instructeurs beschikbaar zijn */
+.geen-instructeurs {
+    background: white;
+    border: 2px dashed #ccc;
+    padding: 24px;
+    text-align: center;
+    color: #888;
+    font-size: 13px;
+}
+
+
+/* ================================================================
+   18. MODAL
+   Pop-up met lesdetails, geopend via kalender-lesblokjes.
+   ================================================================ */
+
+/* Donkere overlay achter de modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.6);
+    overflow-y: auto;
+}
+
+/* Witte kaart in het midden van de overlay */
+.modal-content {
+    background: white;
+    width: 92%;
+    max-width: 420px;
+    margin: 40px auto;
+    padding: 20px;
+    position: relative;
+    font-size: 13px;
+    border-top: 4px solid #1b2940;
+}
+
+.modal-content p { margin: 6px 0; line-height: 1.5; }
+
+/* Sluitknop rechtsboven in de modal */
+.close {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    font-size: 26px;
+    cursor: pointer;
+    padding: 4px 8px;
+    touch-action: manipulation;
+    line-height: 1;
+    color: #1b2940;
+}
+
+.close:hover { background: #f0f4ff; }
+
+
+/* ================================================================
+   19. RESPONSIVE — TABLET (min 480px)
+   Navigatie in één rij, kalender en kaarten iets ruimer.
+   ================================================================ */
+@media (min-width: 480px) {
+
+    body { padding: 10px; }
+
+    /* Navigatie: één rij in plaats van 2×2 grid */
+    .top-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .nav-btn { flex: 1; padding: 12px; }
+
+    /* Kalender dagnamen groter */
+    .days-header div { font-size: 11px; padding: 6px 3px; }
+
+    /* Dagcellen iets hoger */
+    .day { min-height: 65px; padding: 3px; }
+    .date { font-size: 11px; margin-bottom: 4px; }
+    .lesson { font-size: 9px; padding: 2px 4px; }
+
+    /* Leskaarten in aankomende-lessenlijst: horizontaal */
+    .lesson-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .buttons { flex-direction: column; width: auto; min-width: 90px; }
+    .edit, .cancel { padding: 7px 12px; }
+}
+
+
+/* ================================================================
+   20. RESPONSIVE — DESKTOP (min 768px)
+   Volledig formaat: grote kalender, zichtbare lesteksten.
+   ================================================================ */
+@media (min-width: 768px) {
+
+    h1 { font-size: 20px; margin-bottom: 15px; }
+
+    .top-buttons { gap: 12px; margin-bottom: 20px; }
+    .nav-btn { padding: 15px; font-size: 13px; }
+
+    /* Kalender volledig formaat */
+    .days-header { padding: 6px; gap: 3px; }
+    .days-header div { font-size: 12px; padding: 8px; }
+    .calendar-grid { gap: 3px; padding: 6px; }
+    .day { min-height: 90px; padding: 5px; }
+    .date { font-size: 13px; margin-bottom: 6px; }
+
+    /* Lestekst volledig zichtbaar (geen afkappen) */
+    .lesson {
+        font-size: 11px;
+        padding: 3px 6px;
+        margin-bottom: 3px;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+    }
+
+    /* Aankomende leskaarten */
+    .lesson-card { margin: 12px; padding: 14px 18px; }
+    .lesson-card h4 { font-size: 14px; }
+    .lesson-card p  { font-size: 12px; }
+    .buttons { flex-direction: row; gap: 8px; }
+    .edit, .cancel { padding: 8px 14px; font-size: 12px; }
+
+    /* Modal meer ruimte van boven */
+    .modal-content { margin: 80px auto; padding: 25px; }
+
+    /* Dashboard leskaarten: vaste breedte kolommen */
+    .les-datum-blok { min-width: 52px; }
+    .les-extra      { min-width: 160px; }
+    .les-acties .edit,
+    .les-acties .cancel { padding: 8px 14px; }
+}
+
+
+/* ================================================================
+   AANVULLINGEN — Kalender dashboard-stijl + inroosteren
+   ================================================================ */
+
+/* Dag-vandaag: lichtgele achtergrond in kalender */
+.day.dag-vandaag {
+    background: #fffbeb;
+    border-left-color: #f59e0b;
+}
+
+/* Stip naast dagnummer als indicator voor vandaag */
+.vandaag-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #f59e0b;
+    border-radius: 50%;
+    margin-right: 3px;
+    vertical-align: middle;
+}
+
+/* Header bovenop de aankomende-lessenlijst met knop */
+.upcoming-header {
+    background: #1b2940;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+}
+
+.upcoming-header h3 {
+    color: white;
+    margin: 0;
+    font-size: 13px;
+}
+
+/* Knop "+ Les inplannen" / "+ Nieuwe les" in upcoming header */
+.btn-nieuw-les {
+    background: white;
+    color: #1b2940;
+    border: 2px solid white;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    white-space: nowrap;
+}
+
+.btn-nieuw-les:hover {
+    background: #1b2940;
+    color: white;
+    border-color: rgba(255,255,255,.4);
+}
